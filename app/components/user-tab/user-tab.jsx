@@ -74,9 +74,17 @@ export default function UserTab(props) {
 
   const getExpandedContent = useCallback(() => {
     const content = props.tab.map((transaction) => {
-      <Transaction type={transaction.type} amount={transaction.amount} user={props.user} />
+      return (<Transaction key={transaction.id} type={transaction.type} amount={transaction.amount} user={props.user} note={transaction.note} />)
     })
-    return content
+    return (
+      <div className={styles.transactionContainer}>
+        <div className={styles.transactionContainerLeftDeco} />
+        <div className={styles.transactionInner}>
+          {content}
+        </div>
+      </div>
+    )
+      content
   }, [props.tab, props.user])
 
   return (

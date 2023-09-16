@@ -3,7 +3,6 @@
 import styles from './dashboard.module.css'
 import { useState, useCallback } from 'react';
 import clsx from 'clsx';
-import Tab from '../tab/tab'
 import RecentActivity from '../recent-activity/recent-activity';
 import UserTab from '../user-tab/user-tab';
 
@@ -12,19 +11,22 @@ const testTab = [
     type: 'requestFrom',
     amount: 50,
     created: "8/10/23",
-    note: "McDonalds"
+    note: "McDonalds",
+    id: "wfevfvseb"
   },
   {
     type: 'requestTo',
     amount: 25,
     created: "8/10/23",
-    note: "Gas"
+    note: "Gas",
+    id: "wfevfasdfb"
   },
   {
     type: 'paymentTo',
     amount: 5,
     created: "8/10/23",
-    note: "Taxes"
+    note: "Taxes",
+    id: "wfqwerseb"
   }
 ]
 
@@ -69,9 +71,9 @@ export default function Dashboard() {
           <p>3 friends owe you money, you owe 1 friend.</p>
         </div>
         <div className={styles.mainButtons}>
-          <div className={styles.requestButton}>
+          <a className={styles.requestButton} href="/request">
             Request
-          </div>
+          </a>
           <div className={styles.payButton}>
             Pay tab
           </div>

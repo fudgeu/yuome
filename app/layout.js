@@ -1,5 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
 // app/layout.jsx
 import './globals.css'
+import styles from './layout.module.css'
 import { UserProvider } from '@auth0/nextjs-auth0/client';
 import { Inter } from 'next/font/google'
 
@@ -14,9 +16,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-    <UserProvider>
-    <body className={inter.className}>{children}</body>
-    </UserProvider>
+      <body className={inter.className}>
+        <nav className={styles.navbar}>
+          <img src="/yuome-logo-white.png" alt="yuome" />
+        </nav>
+        {children}
+      </body>
     </html>
   );
 }

@@ -1,5 +1,6 @@
 .container {
   display: flex;
+  flex-direction: column;
 }
 
 .header {
@@ -46,4 +47,23 @@
 
 .expanded {
   transform: rotate(-180deg);
+}
+
+.transactionContainer {
+  display: flex;
+  padding-bottom: 1rem;
+}
+
+/*.transactionContainerLeftDeco {
+  display: flex;
+  width: 0.1rem;
+  margin: 0 1.5rem;
+  background-color: var(--border-color);
+  border-radius: var(--border-radius);
+}*/
+
+.transactionInner {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
