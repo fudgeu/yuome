@@ -1,6 +1,10 @@
 :root {
   --border-radius: 2rem;
   --border-radius-button: 1rem;
+  --border-color: #555555;
+
+  --green: #98ff69;
+  --red: #ff6969;
 }
 
 @media (prefers-color-scheme: dark) {

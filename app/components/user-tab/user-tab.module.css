@@ -1,0 +1,49 @@
+.container {
+  display: flex;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 0;
+  width: 100%;
+}
+
+.header h3 {
+  font-size: 1.5rem;
+}
+
+.header p {
+  font-size: 1.5rem;
+}
+
+.container + .container {
+  border-top: solid 0.075rem var(--border-color);
+}
+
+.negative {
+  color: var(--red)
+}
+
+.positive {
+  color: var(--green)
+}
+
+.rightElements {
+  display: flex;
+  gap: 1rem;
+}
+
+.expandButton {
+  all: unset;
+  display: flex;
+  cursor: pointer;
+}
+
+.expandButton img {
+  transition: transform 0.2s;
+}
+
+.expanded {
+  transform: rotate(-180deg);
+}
