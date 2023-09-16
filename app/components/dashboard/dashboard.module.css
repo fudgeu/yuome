@@ -6,8 +6,9 @@
 
 .balanceDisplay {
   display: flex;
+  flex-direction: column;
   width: 100%;
-  justify-content: space-between;
+  gap: 2rem;
   border: solid 0.075rem lightgray;
   border-radius: var(--border-radius);
   padding: 2rem;
@@ -15,7 +16,6 @@
 
 .balanceSummary {
   display: flex;
-  width: 48%;
   flex-direction: column;
   gap: 1rem;
 }
@@ -77,8 +77,26 @@
   flex-direction: column;
 }
 
+.tabSwitcher {
+  display: flex;
+  gap: 2rem;
+}
+
+.tabButton {
+  all: unset;
+}
+
+
+.tabSwitcher h1:hover {
+  cursor: pointer;
+}
+
+.inactiveTab {
+  color: #888888;
+}
+
 .tabList {
   display: grid;
-  grid-template-columns: 48% 48%;
-  gap: 2rem;
+  grid-template-columns: auto auto;
+  column-gap: 2rem;
 }
