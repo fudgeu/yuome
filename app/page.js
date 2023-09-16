@@ -8,6 +8,8 @@ export default function Home() {
 
       <nav className={styles.navbar}>
         <img src="/yuome-logo-white.png" alt="yuome" />
+        <a href="/api/auth/login">Login</a>
+        <a href="/api/auth/logout">Logout</a>
       </nav>
 
       <Dashboard />
