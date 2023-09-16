@@ -7,11 +7,11 @@ export async function POST(request) {
 
     const data  = await request.json()
   
-    const result = await sql`INSERT INTO Users (name, phone_number) VALUES (${data.name}, ${data.phone_number});`;
 
-    
-    // if (!name || !phone_number) throw new Error('Balance and phone number required');
-    
+    const transaction = await sql`INSERT INTO TRANSACTIONS (id, type, amount, r_date) VALUES (${data.id}, ${data.type}, ${data.amount}, ${data.r_date});`;
+
+    const usertransaction = await sql`INSERT INTO USERTRANSACTIONS (pn_to, fk_id, pn_from, notes) VALUES (${data.pn_to}, ${data.id}, ${data.pn_from}, ${data.notes});`;
+
     return NextResponse.json({ data }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error }, { status: 500 });

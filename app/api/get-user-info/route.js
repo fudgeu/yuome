@@ -6,11 +6,12 @@ export async function GET(request) {
   const phone_number = searchParams.get('phone_number');
  
   try {
-    if (!phone_number) throw new Error('Phone number required');
-    res = await sql`SELECT * from`;
+    console.log(`SELECT * FROM transactions as t, usertransactions as u WHERE t.id=u.fk_id and (u.pn_to=\'${phone_number}\' or u.pn_from=\'${phone_number}\') ORDER BY t.r_date`)
+    res = await sql`SELECT * FROM transactions as t, usertransactions as u WHERE t.id=u.fk_id and (u.pn_to=\'${phone_number}\' or u.pn_from=\'${phone_number}\') ORDER BY t.r_date`;
+    
   } catch (error) {
     return NextResponse.json({ error }, { status: 500 });
   }
 
-  return NextResponse.json({ users }, { status: 200 });
+  return NextResponse.json({ res }, { status: 200 });
 }

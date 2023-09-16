@@ -2,8 +2,8 @@
 // app/layout.jsx
 import './globals.css'
 import styles from './layout.module.css'
-import { UserProvider } from '@auth0/nextjs-auth0/client';
 import { Inter } from 'next/font/google'
+import { ClerkProvider } from '@clerk/nextjs';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -15,13 +15,15 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <nav className={styles.navbar}>
-          <img src="/yuome-logo-white.png" alt="yuome" />
-        </nav>
-        {children}
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={inter.className}>
+          <nav className={styles.navbar}>
+            <img src="/yuome-logo-white.png" alt="yuome" />
+          </nav>
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
