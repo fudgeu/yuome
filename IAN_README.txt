@@ -25,6 +25,7 @@ name (str)
 transactions
 owed_to varchar(255) phone_number
 owed_by varchar(255) phone_number
+description varchar(500)
 amount float(10)
 recieved_date date 
 completed_date date
