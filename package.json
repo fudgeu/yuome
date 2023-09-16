@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^3.1.0",
+    "@clerk/nextjs": "^4.23.5",
     "@prisma/client": "^5.3.1",
     "@vercel/postgres": "^0.4.1",
     "clsx": "^2.0.0",
