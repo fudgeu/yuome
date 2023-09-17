@@ -24,7 +24,11 @@ export async function POST(request) {
 
     if (data.pn_from.startsWith('+1')){
       data.pn_from = data.pn_from.substring(2,12)
+    }    
+    if (data.pn_to.startsWith('+1')){
+      data.pn_to = data.pn_to.substring(2,12)
     }
+
 
 
     console.log(`INSERT INTO TRANSACTIONS (id, type, amount, r_date) VALUES (${id}, ${data.type}, ${data.amount}, \'${year}-${month}-${day}\');`)
@@ -38,11 +42,34 @@ export async function POST(request) {
     const authToken = process.env.TWILIO_AUTH_TOKEN;
     const client = require('twilio')(accountSid, authToken);
 
+    if (data.notes.localeCompare("") == 0){
+      if (data.type.localeCompare("req") == 0){
+
+        client.messages
+        .create({
+          body: `${name.rows[0].name} has requested \$${data.amount}. Visit yuome for more info!`,
+          from: '+18447710785',
+          to: data.pn_to
+          })
+          .then(message => console.log(message.sid));
+      }
+      else if(data.type.localeCompare("pay") == 0){
+
+        client.messages
+        .create({
+          body: `${name.rows[0].name} has paid you \$${data.amount}. Visit yuome for more info!`,
+          from: '+18447710785',
+          to: data.pn_to
+          })
+          .then(message => console.log(message.sid));  
+      }
+    }
+  else{
     if (data.type.localeCompare("req") == 0){
 
       client.messages
       .create({
-        body: `${name.rows[0].name} has requested \$${data.amount}. Visit yuome for more info!`,
+        body: `${name.rows[0].name} has requested \$${data.amount} for \"${data.notes}\". Visit yuome for more info!`,
         from: '+18447710785',
         to: data.pn_to
         })
@@ -52,13 +79,13 @@ export async function POST(request) {
 
       client.messages
       .create({
-        body: `${name.rows[0].name} has paid you \$${data.amount}. Visit yuome for more info!`,
+        body: `${name.rows[0].name} has paid you \$${data.amount} for \"${data.notes}\". Visit yuome for more info!`,
         from: '+18447710785',
         to: data.pn_to
         })
         .then(message => console.log(message.sid));  
     }
-
+  }
 
       return NextResponse.json({ data }, { status: 200 });
   } catch (error) {
