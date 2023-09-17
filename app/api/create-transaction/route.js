@@ -20,6 +20,8 @@ export async function POST(request) {
     let year = date.getFullYear();
     let fulldate = `${year}-${month}-${day}`;
 
+    data.pn_to = data.pn_to.split(" ").join("")
+
     if (data.pn_from.startsWith('+1')){
       data.pn_from = data.pn_from.substring(2,12)
     }
