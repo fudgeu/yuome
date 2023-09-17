@@ -33,6 +33,24 @@ export async function POST(request) {
     console.log(`INSERT INTO USERTRANSACTIONS (pn_to, fk_id, pn_from, notes) VALUES (${data.pn_to}, ${id}, ${data.pn_from}, ${data.notes});`)
     const usertransaction = await sql`INSERT INTO USERTRANSACTIONS (pn_to, fk_id, pn_from, notes) VALUES (${data.pn_to}, ${id}, ${data.pn_from}, ${data.notes});`;
 
+    const name = await sql`SELECT NAME FROM USERS WHERE USERS.PHONE_NUMBER=${data.pn_from}`;
+
+   const accountSid = process.env.TWILIO_ACCOUNT_SID;
+   const authToken = process.env.TWILIO_AUTH_TOKEN;
+   const client = require('twilio')(accountSid, authToken);
+
+   if (data.type.localeCompare("req") == 0){
+
+     client.messages
+     .create({
+       body: `${name.rows[0].name} has requested \$${data.amount}. Visit yuome for more info!`,
+       from: '+18447710785',
+       to: data.pn_to
+      })
+      .then(message => console.log(message.sid));
+  } 
+
+
     return NextResponse.json({ data }, { status: 200 });
   } catch (error) {
     console.log(error)
