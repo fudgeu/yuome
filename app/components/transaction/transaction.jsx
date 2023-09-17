@@ -5,6 +5,9 @@ import styles from './transaction.module.css'
 
 export default function Transaction(prop) {
 
+  const [notifMessage, setNotifMessage] = useState('')
+  const [notifTimeoutId, setNotifTimeoutId] = useState(null)
+
   const getBulletPoint = useCallback(() => {
     if (prop.type === 'requestTo' || prop.type === 'paymentFrom') {
       return <div className={styles.green} />
@@ -30,8 +33,23 @@ export default function Transaction(prop) {
     return <p>{returnText}</p>
   }, [prop.amount, prop.note, prop.type, prop.screenName])
 
+  const showNotif = useCallback((message) => {
+    setNotifMessage(message)
+    if (notifTimeoutId != null) {
+      clearTimeout(notifTimeoutId)
+    }
+    setNotifTimeoutId(
+      setTimeout(() => {
+        setNotifMessage("")
+        setNotifTimeoutId(null)
+      },
+      4000)
+    )
+  }, [notifTimeoutId])
+
   const markPaid = useCallback((reversed) => {
     if (self == null) return;
+    showNotif("Marking as paid back...")
     fetch(
       "/api/create-transaction",
       {
@@ -47,16 +65,46 @@ export default function Transaction(prop) {
           "content-type": "application/json",
         },
       }).then((resp) => {
-        console.log(resp)
+        if (resp.ok) {
+          showNotif("Succesfully marked as paid back!")
+        } else {
+          showNotif("An error occured - please try again later")
+        }
       })
-  }, [prop.amount, prop.note, prop.self, prop.user])
+  }, [prop.amount, prop.note, prop.self, prop.user, showNotif])
+
+  const markCanceled = useCallback(() => {
+    if (self == null) return;
+    showNotif("Marking as paid back...")
+    fetch(
+      "/api/create-transaction",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          type: 'pay',
+          amount: prop.amount,
+          'pn_to': reversed ? prop.self : prop.user,
+          'pn_from': reversed ? prop.user : prop.self,
+          notes: prop.note
+        }),
+        headers: {
+          "content-type": "application/json",
+        },
+      }).then((resp) => {
+        if (resp.ok) {
+          showNotif("Succesfully marked as paid back!")
+        } else {
+          showNotif("An error occured - please try again later")
+        }
+      })
+  }, [])
 
   const getButtons = useCallback(() => {
     if (prop.type.startsWith("request")) {
       return (
         <div className={styles.buttonContainer}>
           <button className={styles.button} onClick={() => markPaid(prop.type === "requestTo")}>
-            <img src="money.svg" alt="" /> Paid back
+            <img src="money.svg" alt="" /> Pay back
           </button>
           <button className={styles.button}>
             <img src="cancel.svg" alt="" /> Cancel
@@ -74,6 +122,15 @@ export default function Transaction(prop) {
     }
   }, [markPaid, prop.type])
 
+  const getNotif = useCallback(() => {
+    if (notifMessage === '') return []
+    return (
+      <div className={styles.notifContainer}>
+        <p>{notifMessage}</p>
+      </div>
+    )
+  }, [notifMessage])
+
   return (
     <div className={styles.container}>
       <div className={styles.leftContainer}>
@@ -81,6 +138,7 @@ export default function Transaction(prop) {
         {getText()}
       </div>
       {getButtons()}
+      {getNotif()}
     </div>
   )
 }
