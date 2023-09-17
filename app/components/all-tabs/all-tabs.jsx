@@ -62,6 +62,7 @@ export default function AllTabs() {
           const parsedTransaction = {}
           parsedTransaction.amount = transaction.amount
           parsedTransaction.created = transaction.r_date
+          parsedTransaction.note = transaction.notes
           parsedTransaction.id = transaction.id
           if (curUser === transaction.pn_from) {
             if (transaction.type === "req") {
@@ -73,13 +74,9 @@ export default function AllTabs() {
             sortedData[transaction.pn_to].push(parsedTransaction)
           } else if (curUser === transaction.pn_to) {
             if (transaction.type === "req") {
-              sortedData[transaction.pn_from] = {
-                type: "requestFrom",
-              }
+              parsedTransaction.type = "requestFrom"
             } else if (transaction.type === 'pay') {
-              sortedData[transaction.pn_from] = {
-                type: "paymentFrom"
-              }
+              parsedTransaction.type = "paymentFrom"
             }
             if (sortedData[transaction.pn_from] == null) sortedData[transaction.pn_from] = []
             sortedData[transaction.pn_from].push(parsedTransaction)

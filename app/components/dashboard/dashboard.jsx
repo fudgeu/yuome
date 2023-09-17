@@ -1,10 +1,12 @@
 'use client'
 
 import styles from './dashboard.module.css'
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import clsx from 'clsx';
 import RecentActivity from '../recent-activity/recent-activity';
 import AllTabs from '../all-tabs/all-tabs';
+import { useUser } from '@clerk/nextjs';
+import { useRouter } from 'next/navigation';
 
 export default function Dashboard() {
   const [currentTab, setTab] = useState('activeTabs');
