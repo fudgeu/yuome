@@ -3,7 +3,7 @@
 import styles from './page.module.css'
 import Dashboard from './components/dashboard/dashboard'
 import { useRouter } from 'next/navigation';
-import { useUser } from '@clerk/nextjs';
+import { useClerk, useUser } from '@clerk/nextjs';
 import { useState, useEffect } from 'react';
 import NameSetup from './components/name-setup/name-setup';
 
@@ -12,6 +12,8 @@ export default function Home() {
 
   const router = useRouter()
   const { isSignedIn, user, isLoaded } = useUser();
+  const { signOut } = useClerk()
+
 
   console.log(`signed in: ${isSignedIn} loaded: ${isLoaded}`)
 
@@ -50,6 +52,12 @@ export default function Home() {
   return (
     <main>
       <Dashboard />
+      <div className={styles.footer}>
+        <p>Logged in as {user?.primaryPhoneNumber.phoneNumber}</p>
+        <button className={styles.signOutButton} onClick={() => signOut()}>
+          Sign out
+        </button>
+      </div>
       {showNameSetup && 
         <NameSetup 
           number={user?.primaryPhoneNumber.phoneNumber}

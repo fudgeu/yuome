@@ -1,3 +1,30 @@
+.footer {
+  width: 100%;
+  height: 10rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.signOutButton {
+  all: unset;
+  display: flex;
+  border: solid 0.075rem var(--border-color);
+  border-radius: var(--border-radius-button-xs);
+  justify-content: center;
+  align-items: center;
+  height: 2rem;
+  padding: 0.25rem 1rem;
+  gap: 0.5rem;
+}
+
+.signOutButton:hover {
+  cursor: pointer;
+  background-color: var(--border-color);
+}
+
+
 /* Mobile */
 @media (max-width: 700px) {
   
