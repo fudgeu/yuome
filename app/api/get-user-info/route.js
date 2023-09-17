@@ -8,8 +8,7 @@ export async function POST(request) {
   const data = await request.json()
  
   try {
-    
-    data.pn_to = data.phone_number.split(" ").join("")
+  
 
     if (data.phone_number.startsWith('+1')){
       data.phone_number = data.phone_number.substring(2,12)
