@@ -11,8 +11,8 @@ export async function POST(request) {
     
     data.pn_to = data.phone_number.split(" ").join("")
 
-    if (data.pn_from.startsWith('+1')){
-      data.pn_from = data.phone_number.substring(2,12)
+    if (data.phone_number.startsWith('+1')){
+      data.phone_number = data.phone_number.substring(2,12)
     }
 
     console.log(`SELECT * FROM transactions as t, usertransactions as u WHERE t.id=u.fk_id and (u.pn_to=\'${data.phone_number}\' or u.pn_from=\'${data.phone_number}\') ORDER BY t.r_date`)
