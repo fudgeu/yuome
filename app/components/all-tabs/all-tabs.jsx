@@ -36,7 +36,7 @@ export default function AllTabs() {
   useEffect(() => {
     if (user == null) return
     fetch(
-      "/api/get-user-info",
+      "/api/get-user-transactions",
       {
         method: "POST",
         body: JSON.stringify({
@@ -89,8 +89,6 @@ export default function AllTabs() {
   return (
     <div className={styles.tabList}>
       {Object.keys(tabs).map((user) => {
-        console.log(`mapping: ${user}`)
-        console.log(tabs[user])
         return (<UserTab key={user} user={user} tab={tabs[user]} />)
       })}
     </div>

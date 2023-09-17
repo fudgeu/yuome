@@ -24,7 +24,8 @@ export default function NameSetup(props) {
         },
       }).then((resp) => {
         console.log(resp)
-        setTimeout(() => router.push("/"), 5000);
+        props.removePrompt()
+        //setTimeout(() => router.refresh(), 500)
       })
   }, [newName, props.number, router])
 

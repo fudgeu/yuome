@@ -22,7 +22,6 @@ export default function Request() {
 
   const submitRequest = useCallback(async () => {
     setShowLoading(true)
-    console.log(user.primaryPhoneNumber)
     const resp = await fetch(
       "/api/create-transaction",
       {
