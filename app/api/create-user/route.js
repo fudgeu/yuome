@@ -5,13 +5,17 @@ export async function POST(request) {
   
   try {
 
+    
+
     const data  = await request.json()
+
+    if (data.phone_number.startsWith('+1')){
+      data.phone_number = data.phone_number.substring(2,12)
+    }
   
     const result = await sql`INSERT INTO Users (name, phone_number) VALUES (${data.name}, ${data.phone_number});`;
 
-    if (data.pn_from.startsWith('+1')){
-      data.pn_from = data.pn_from.substring(2,12)
-    }
+
 
     // if (!name || !phone_number) throw new Error('Balance and phone number required');
     

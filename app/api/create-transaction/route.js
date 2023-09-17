@@ -34,26 +34,36 @@ export async function POST(request) {
 
     const name = await sql`SELECT NAME FROM USERS WHERE USERS.PHONE_NUMBER=${data.pn_from}`;
 
-   const accountSid = process.env.TWILIO_ACCOUNT_SID;
-   const authToken = process.env.TWILIO_AUTH_TOKEN;
-   const client = require('twilio')(accountSid, authToken);
+    const accountSid = process.env.TWILIO_ACCOUNT_SID;
+    const authToken = process.env.TWILIO_AUTH_TOKEN;
+    const client = require('twilio')(accountSid, authToken);
 
-   if (data.type.localeCompare("req") == 0){
+    if (data.type.localeCompare("req") == 0){
 
-     client.messages
-     .create({
-       body: `${name.rows[0].name} has requested \$${data.amount}. Visit yuome for more info!`,
-       from: '+18447710785',
-       to: data.pn_to
-      })
-      .then(message => console.log(message.sid));
-  } 
+      client.messages
+      .create({
+        body: `${name.rows[0].name} has requested \$${data.amount}. Visit yuome for more info!`,
+        from: '+18447710785',
+        to: data.pn_to
+        })
+        .then(message => console.log(message.sid));
+    }
+    else if(data.type.localeCompare("pay") == 0){
+
+      client.messages
+      .create({
+        body: `${name.rows[0].name} has paid you \$${data.amount}. Visit yuome for more info!`,
+        from: '+18447710785',
+        to: data.pn_to
+        })
+        .then(message => console.log(message.sid));  
+    }
 
 
-    return NextResponse.json({ data }, { status: 200 });
+      return NextResponse.json({ data }, { status: 200 });
   } catch (error) {
-    console.log(error)
-    return NextResponse.json({ error }, { status: 500 });
+      console.log(error)
+      return NextResponse.json({ error }, { status: 500 });
   }
  
   // const users = await sql`SELECT * FROM Users;`;
