@@ -8,6 +8,13 @@ export async function POST(request) {
   const data = await request.json()
  
   try {
+    
+    data.pn_to = data.pn_to.split(" ").join("")
+
+    if (data.pn_from.startsWith('+1')){
+      data.pn_from = data.pn_from.substring(2,12)
+    }
+
     console.log(`SELECT * FROM transactions as t, usertransactions as u WHERE t.id=u.fk_id and (u.pn_to=\'${data.phone_number}\' or u.pn_from=\'${data.phone_number}\') ORDER BY t.r_date`)
     const res  = await sql`SELECT * FROM transactions as t, usertransactions as u WHERE t.id=u.fk_id and (u.pn_to=${data.phone_number} or u.pn_from=${data.phone_number}) ORDER BY t.r_date`;
     return NextResponse.json( res.rows , { status: 200 });
