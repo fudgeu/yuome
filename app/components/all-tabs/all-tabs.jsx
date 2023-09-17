@@ -88,8 +88,8 @@ export default function AllTabs() {
 
   return (
     <div className={styles.tabList}>
-      {Object.keys(tabs).map((user) => {
-        return (<UserTab key={user} user={user} tab={tabs[user]} />)
+      {Object.keys(tabs).map((oUser) => {
+        return (<UserTab key={oUser} user={oUser} tab={tabs[oUser]} self={user?.primaryPhoneNumber.phoneNumber}/>)
       })}
     </div>
   )

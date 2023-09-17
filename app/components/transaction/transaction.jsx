@@ -30,16 +30,37 @@ export default function Transaction(prop) {
     return <p>{returnText}</p>
   }, [prop.amount, prop.note, prop.type, prop.screenName])
 
+  const markPaid = useCallback((reversed) => {
+    if (self == null) return;
+    fetch(
+      "/api/create-transaction",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          type: 'pay',
+          amount: prop.amount,
+          'pn_to': reversed ? prop.self : prop.user,
+          'pn_from': reversed ? prop.user : prop.self,
+          notes: prop.note
+        }),
+        headers: {
+          "content-type": "application/json",
+        },
+      }).then((resp) => {
+        console.log(resp)
+      })
+  }, [prop.amount, prop.note, prop.self, prop.user])
+
   const getButtons = useCallback(() => {
     if (prop.type.startsWith("request")) {
       return (
         <div className={styles.buttonContainer}>
-          <div className={styles.button}>
-          <img src="money.svg" alt="" /> Pay back
-          </div>
-          <div className={styles.button}>
+          <button className={styles.button} onClick={() => markPaid(prop.type === "requestTo")}>
+            <img src="money.svg" alt="" /> Paid back
+          </button>
+          <button className={styles.button}>
             <img src="cancel.svg" alt="" /> Cancel
-          </div>
+          </button>
         </div>
       )
     } else if (prop.type.startsWith("payment")) {
@@ -51,7 +72,7 @@ export default function Transaction(prop) {
         </div>
       )
     }
-  }, [prop.type])
+  }, [markPaid, prop.type])
 
   return (
     <div className={styles.container}>

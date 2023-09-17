@@ -97,8 +97,8 @@ export default function UserTab(props) {
   }, [props])
 
   const getExpandedContent = useCallback(() => {
-    const content = props.tab.map((transaction) => {
-      return (<Transaction key={transaction.id} type={transaction.type} amount={transaction.amount} user={props.user} note={transaction.note} screenName={name} />)
+    const content = props.tab.toReversed().map((transaction) => {
+      return (<Transaction key={transaction.id} type={transaction.type} amount={transaction.amount} user={props.user} note={transaction.note} screenName={name} self={props.self} />)
     })
     return (
       <div className={styles.transactionContainer}>
@@ -109,7 +109,7 @@ export default function UserTab(props) {
       </div>
     )
       content
-  }, [name, props.tab, props.user])
+  }, [name, props.self, props.tab, props.user])
 
   return (
     <div className={styles.container}>
