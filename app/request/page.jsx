@@ -22,6 +22,7 @@ export default function Request() {
 
   const submitRequest = useCallback(async () => {
     setShowLoading(true)
+    console.log(user.primaryPhoneNumber)
     const resp = await fetch(
       "/api/create-transaction",
       {
@@ -30,7 +31,7 @@ export default function Request() {
           type: 'req',
           amount: amt,
           'pn_to': toNumber,
-          'pn_from': user.primaryPhoneNumber,
+          'pn_from': user.primaryPhoneNumber.phoneNumber,
           notes: note
         }),
         headers: {
