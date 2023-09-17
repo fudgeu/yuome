@@ -29,7 +29,8 @@ body {
 
 body {
   color: white;
-  background: black;
+  background: linear-gradient(45deg, #110044, 10%, #000000);
+  background-attachment: fixed;
   display: flex;
   flex-direction: column;
   margin-left: auto;

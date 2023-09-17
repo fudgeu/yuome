@@ -1,22 +1,19 @@
 import styles from './activity-item.module.css'
 import { useCallback } from 'react'
-/*
-Prop[0]:
-{
-  type: 'request' | 'payment'
-  from: string
-  amount: number
-  note: string
-}
-*/
+
 export default function ActivityItem(props) {
 
   const getTitleText = useCallback(() => {
-    if (props.item.type === 'request') {
-      return (<h2>{props.item.from} requested</h2>)
-    } else if (props.item.type === 'payment') {
-      return (<h2>You paid {props.item.from}</h2>)
-    }
+    console.log(props.item.type)
+    if (props.item.type === 'requestFrom') {
+      return (<h2>{props.item.user} requested</h2>)
+    } else if (props.item.type === 'paymentTo') {
+      return (<h2>You paid {props.item.user}</h2>)
+    } else if (props.item.type === 'requestTo') {
+      return (<h2>You requested {props.item.user}</h2>)
+    } else if (props.item.type === 'paymentFrom') {
+      return (<h2>{props.item.user} paid you</h2>)
+    } 
   }, [props])
 
   return (

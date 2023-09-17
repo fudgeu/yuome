@@ -53,20 +53,35 @@
 .mainButtons {
   display: flex;
   gap: 2rem;
+  width: 100%;
 }
 
 .mainButton {
+  all: unset;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  border: solid 0.075rem var(--border-color);
   border-radius: var(--border-radius-button);
-  background-color: white;
-  color: black;
+  color: white;
   font-size: 2rem;
-  padding: 1rem 2rem;
-  flex-grow: 1;
+  padding: 1rem 1rem;
   font-weight: 600;
+  width: 100%;
+  transition: background-color 0.1s;
+}
+
+.mainButton:hover {
+  background-color: var(--border-color);
+  cursor: pointer;
 }
 
 .requestButton {
   composes: mainButton;
+}
+
+.requestButton img {
+  height: 100%;
 }
 
 .payButton {

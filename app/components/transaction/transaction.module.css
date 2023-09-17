@@ -52,6 +52,16 @@
   background-color: var(--red);
 }
 
+.bulletCancelled {
+  filter: saturate(50%);
+  opacity: 25%;
+}
+
+.cancelled {
+  color: var(--border-color);
+  text-decoration: line-through;
+}
+
 .buttonContainer {
   display: flex;
   gap: 0.75rem;

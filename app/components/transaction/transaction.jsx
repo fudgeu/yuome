@@ -2,6 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useCallback, useEffect, useState } from 'react'
 import styles from './transaction.module.css'
+import clsx from 'clsx'
 
 export default function Transaction(prop) {
 
@@ -9,12 +10,16 @@ export default function Transaction(prop) {
   const [notifTimeoutId, setNotifTimeoutId] = useState(null)
 
   const getBulletPoint = useCallback(() => {
-    if (prop.type === 'requestTo' || prop.type === 'paymentFrom') {
-      return <div className={styles.green} />
-    } else if (prop.type === 'requestFrom' || prop.type === 'paymentTo') {
-      return <div className={styles.red} />
-    }
-  }, [prop.type])
+    return (
+      <div className={
+        clsx({
+          [styles.green]: prop.type === 'requestTo' || prop.type === 'paymentFrom',
+          [styles.red]: prop.type === 'requestFrom' || prop.type === 'paymentTo',
+          [styles.bulletCancelled]: prop.cancelled
+        })
+     }/>
+    )
+  }, [prop.cancelled, prop.type])
 
   const getText = useCallback(() => {
     let returnText
@@ -28,10 +33,16 @@ export default function Transaction(prop) {
       returnText = `${prop.screenName} paid you $${prop.amount}`
     }
     if (prop.note != null && prop.note !== "") {
-      returnText = `${returnText}: ${prop.note}`
+      returnText = `${returnText} for '${prop.note}'`
     }
-    return <p>{returnText}</p>
-  }, [prop.amount, prop.note, prop.type, prop.screenName])
+    return (
+      <p className={clsx({
+        [styles.cancelled]: prop.cancelled
+      })}>
+        {returnText}
+      </p>
+    )
+  }, [prop.type, prop.note, prop.cancelled, prop.amount, prop.screenName])
 
   const showNotif = useCallback((message) => {
     setNotifMessage(message)
@@ -67,60 +78,99 @@ export default function Transaction(prop) {
       }).then((resp) => {
         if (resp.ok) {
           showNotif("Succesfully marked as paid back!")
+          prop.update()
         } else {
           showNotif("An error occured - please try again later")
         }
       })
-  }, [prop.amount, prop.note, prop.self, prop.user, showNotif])
+  }, [prop, showNotif])
 
-  const markCanceled = useCallback(() => {
+  const markCancelled = useCallback((reverse) => {
     if (self == null) return;
-    showNotif("Marking as paid back...")
+    showNotif(`Marking as ${reverse ? "uncancelled" : "cancelled"}...`)
     fetch(
-      "/api/create-transaction",
+      "/api/edit-status",
       {
         method: "POST",
         body: JSON.stringify({
-          type: 'pay',
-          amount: prop.amount,
-          'pn_to': reversed ? prop.self : prop.user,
-          'pn_from': reversed ? prop.user : prop.self,
-          notes: prop.note
+          id: prop.id,
+          status: reverse ? true : false
         }),
         headers: {
           "content-type": "application/json",
         },
       }).then((resp) => {
         if (resp.ok) {
-          showNotif("Succesfully marked as paid back!")
+          showNotif(`Succesfully marked as ${reverse ? "uncancelled" : "cancelled"}!`)
+          prop.update()
         } else {
           showNotif("An error occured - please try again later")
         }
       })
-  }, [])
+  }, [prop, showNotif])
 
   const getButtons = useCallback(() => {
-    if (prop.type.startsWith("request")) {
+    if (prop.type === "requestFrom" && !prop.cancelled) {
       return (
         <div className={styles.buttonContainer}>
           <button className={styles.button} onClick={() => markPaid(prop.type === "requestTo")}>
-            <img src="money.svg" alt="" /> Pay back
+            <img src="money.svg" alt="" /> Quick pay
           </button>
-          <button className={styles.button}>
+          <button className={styles.button} onClick={() => markCancelled(false)}>
             <img src="cancel.svg" alt="" /> Cancel
           </button>
         </div>
       )
-    } else if (prop.type.startsWith("payment")) {
+    } else if (prop.type === "requestTo" && !prop.cancelled) {
       return (
         <div className={styles.buttonContainer}>
-          <div className={styles.button}>
+          <button className={styles.button} onClick={() => markCancelled(false)}>
+            <img src="cancel.svg" alt="" /> Cancel
+          </button>
+        </div>
+      )
+    } else if (prop.type === "paymentFrom" && !prop.cancelled) {
+      return (
+        <div className={styles.buttonContainer}>
+          <button className={styles.button} onClick={() => markCancelled(false)}>
+            <img src="cancel.svg" alt="" /> Invalidate
+          </button>
+        </div>
+      )
+    } else if (prop.type === "paymentTo" && !prop.cancelled) {
+      return (
+        <div className={styles.buttonContainer}>
+          <button className={styles.button} onClick={() => markCancelled(false)}>
             <img src="undo.svg" alt="" /> Undo
-          </div>
+          </button>
+        </div>
+      )
+    } else if (prop.type.startsWith("request") && prop.cancelled) {
+      return (
+        <div className={styles.buttonContainer}>
+          <button className={styles.button} onClick={() => markCancelled(true)}>
+            <img src="undo.svg" alt="" /> Uncancel
+          </button>
+        </div>
+      )
+    } else if (prop.type === "paymentFrom" && prop.cancelled) {
+      return (
+        <div className={styles.buttonContainer}>
+          <button className={styles.button} onClick={() => markCancelled(true)}>
+            <img src="undo.svg" alt="" /> Revalidate
+          </button>
+        </div>
+      )
+    } else if (prop.type === "paymentTo" && prop.cancelled) {
+      return (
+        <div className={styles.buttonContainer}>
+          <button className={styles.button} onClick={() => markCancelled(true)}>
+            <img src="undo.svg" alt="" /> Redo
+          </button>
         </div>
       )
     }
-  }, [markPaid, prop.type])
+  }, [markCancelled, markPaid, prop.cancelled, prop.type])
 
   const getNotif = useCallback(() => {
     if (notifMessage === '') return []

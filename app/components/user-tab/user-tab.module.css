@@ -67,3 +67,20 @@
   flex-direction: column;
   width: 100%;
 }
+
+.payButton {
+  all: unset;
+  display: flex;
+  border: solid 0.075rem var(--border-color);
+  border-radius: var(--border-radius-button-xs);
+  justify-content: center;
+  align-items: center;
+  height: 2rem;
+  padding: 0 0.75rem;
+  gap: 0.5rem;
+}
+
+.payButton:hover {
+  cursor: pointer;
+  background-color: var(--border-color);
+}

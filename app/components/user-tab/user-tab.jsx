@@ -4,53 +4,11 @@ import styles from './user-tab.module.css'
 import { useState, useCallback, useEffect } from 'react'
 import clsx from 'clsx'
 import Transaction from '../transaction/transaction'
-
-// Prop: user, transactions
-// For now:
-/*
-user: {
-  user: string;
-  tabs: {
-    "3525758678": [
-      {
-        type: 'requestFrom'
-        amount: number;
-        created: date?;
-        note: string
-      },
-      {
-        type: 'requestTo'
-        amount: number;
-        created: date?;
-        note: string
-      },
-      {
-        type: 'paymentTo'
-        amount: number;
-        created: date?;
-        note: string
-      },
-      {
-        type: 'paymentFrom'
-        amount: number;
-        created: date?;
-        note: string
-      },
-    ],
-    "8132351582": [
-      {
-        type: 'paymentTo'
-        amount: number;
-        created: date?;
-        note: string
-      }
-    ]
-  }
-}
-*/
+import PayScreen from '../pay-screen/pay-screen'
 
 export default function UserTab(props) {
 
+  const [showPayScreen, setShowPayScreen] = useState(false)
   const [isOpen, setOpen] = useState(false)
   const [name, setName] = useState(props.user)
 
@@ -80,6 +38,7 @@ export default function UserTab(props) {
   const calculateBalance = useCallback(() => {
     let totalBalance = 0
     props.tab.forEach((transaction) => {
+      if (transaction.cancelled) return
       if (transaction.type === 'requestFrom' || transaction.type === 'paymentFrom') {
         totalBalance -= transaction.amount
       } else if (transaction.type === 'requestTo' || transaction.type === 'paymentTo') {
@@ -98,7 +57,20 @@ export default function UserTab(props) {
 
   const getExpandedContent = useCallback(() => {
     const content = props.tab.toReversed().map((transaction) => {
-      return (<Transaction key={transaction.id} type={transaction.type} amount={transaction.amount} user={props.user} note={transaction.note} screenName={name} self={props.self} />)
+      return (
+        <Transaction 
+          key={transaction.id}
+          id={transaction.id}
+          type={transaction.type}
+          amount={transaction.amount}
+          user={props.user}
+          note={transaction.note}
+          cancelled={transaction.cancelled}
+          screenName={name}
+          self={props.self}
+          update={props.update}
+        />
+      )
     })
     return (
       <div className={styles.transactionContainer}>
@@ -109,13 +81,24 @@ export default function UserTab(props) {
       </div>
     )
       content
-  }, [name, props.self, props.tab, props.user])
+  }, [name, props.self, props.tab, props.update, props.user])
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h3>{name}</h3>
         <div className={styles.rightElements}>
+          <button 
+            className={styles.payButton}
+            role="button"
+            onClick={() => {setShowPayScreen(true)}}
+          >
+            <img 
+              src="money.svg" 
+              alt="Pay an amount"
+            />
+            Pay amount
+          </button>
           {calculateBalance()}
           <button 
             className={styles.expandButton}
@@ -135,6 +118,16 @@ export default function UserTab(props) {
         </div>
       </div>
       {isOpen && getExpandedContent()}
+      {showPayScreen && 
+        <PayScreen 
+          to={props.user}
+          from={props.self}
+          screenName={name}
+          close={() => {
+            setShowPayScreen(false);
+            props.update()
+          }}
+        />}
     </div>
   )
 }
