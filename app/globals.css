@@ -4,6 +4,8 @@
   --border-radius-button-xs: 0.75rem;
   --border-color: #555555;
   --svg-dim-opacity: 33%;
+  --modal-overlay: #000000cc;
+  --aside-color: #aaaaaa;
 
   --green: #98ff69;
   --red: #ff6969;

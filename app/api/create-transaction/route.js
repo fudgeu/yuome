@@ -28,7 +28,6 @@ export async function POST(request) {
 
 
     console.log(`INSERT INTO TRANSACTIONS (id, type, amount, r_date) VALUES (${id}, ${data.type}, ${data.amount}, \'${year}-${month}-${day}\');`)
-    // console.log(`INSERT INTO TRANSACTIONS (id, type, amount, r_date) VALUES (${id}, ${data.type}, ${data.amount}, \'${date}\');`)
     const transaction = await sql`INSERT INTO TRANSACTIONS (id, type, amount, r_date, status) VALUES (${id}, ${data.type}, ${data.amount}, ${fulldate}, true );`;
     console.log(`INSERT INTO USERTRANSACTIONS (pn_to, fk_id, pn_from, notes) VALUES (${data.pn_to}, ${id}, ${data.pn_from}, ${data.notes});`)
     const usertransaction = await sql`INSERT INTO USERTRANSACTIONS (pn_to, fk_id, pn_from, notes) VALUES (${data.pn_to}, ${id}, ${data.pn_from}, ${data.notes});`;
