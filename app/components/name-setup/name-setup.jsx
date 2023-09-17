@@ -25,9 +25,8 @@ export default function NameSetup(props) {
       }).then((resp) => {
         console.log(resp)
         props.removePrompt()
-        //setTimeout(() => router.refresh(), 500)
       })
-  }, [newName, props.number, router])
+  }, [newName, props])
 
   return (
     <div className={styles.screen}>

@@ -1,12 +1,7 @@
+'use client'
 /* eslint-disable @next/next/no-img-element */
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import styles from './transaction.module.css'
-
-/*
-  prop.type = 'requestTo' | 'requestFrom' | 'paymentTo' | 'paymentFrom'
-  prop.amount: number
-  prop.user: string
-*/
 
 export default function Transaction(prop) {
 
@@ -21,19 +16,19 @@ export default function Transaction(prop) {
   const getText = useCallback(() => {
     let returnText
     if (prop.type === 'requestTo') {
-      returnText = `You requested $${prop.amount} from ${prop.user}`
+      returnText = `You requested $${prop.amount} from ${prop.screenName}`
     } else if (prop.type === 'requestFrom') {
-      returnText = `${prop.user} requested $${prop.amount} from you`
+      returnText = `${prop.screenName} requested $${prop.amount} from you`
     } else if (prop.type === 'paymentTo') {
-      returnText = `You paid ${prop.user} $${prop.amount}`
+      returnText = `You paid ${prop.screenName} $${prop.amount}`
     } else if (prop.type === 'paymentFrom') {
-      returnText = `${prop.user} paid you $${prop.amount}`
+      returnText = `${prop.screenName} paid you $${prop.amount}`
     }
     if (prop.note != null && prop.note !== "") {
       returnText = `${returnText}: ${prop.note}`
     }
     return <p>{returnText}</p>
-  }, [prop.amount, prop.note, prop.type, prop.user])
+  }, [prop.amount, prop.note, prop.type, prop.screenName])
 
   const getButtons = useCallback(() => {
     if (prop.type.startsWith("request")) {

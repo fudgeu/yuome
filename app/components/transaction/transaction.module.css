@@ -23,8 +23,6 @@
   opacity: 100%;
 }
 
-
-
 .container + .container {
   border-top: solid 0.075rem var(--border-color);
 }

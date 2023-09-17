@@ -1,7 +1,7 @@
 'use client'
 /* eslint-disable @next/next/no-img-element */
 import styles from './user-tab.module.css'
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import clsx from 'clsx'
 import Transaction from '../transaction/transaction'
 
@@ -52,6 +52,30 @@ user: {
 export default function UserTab(props) {
 
   const [isOpen, setOpen] = useState(false)
+  const [name, setName] = useState(props.user)
+
+  // Get user name, if it exists
+  useEffect(() => {
+    fetch(
+      "/api/get-user-name",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          phone_number: props.user
+        }),
+        headers: {
+          "content-type": "application/json",
+        },
+      }).then((resp) => {
+        return resp.json()
+      }).then((json) => {
+        //console.log(`test ${json[0]?.name}`)
+        if (json[0]?.name != null) {
+          setName(json[0].name)
+        }
+      }
+    )
+  })
 
   const calculateBalance = useCallback(() => {
     let totalBalance = 0
@@ -74,7 +98,7 @@ export default function UserTab(props) {
 
   const getExpandedContent = useCallback(() => {
     const content = props.tab.map((transaction) => {
-      return (<Transaction key={transaction.id} type={transaction.type} amount={transaction.amount} user={props.user} note={transaction.note} />)
+      return (<Transaction key={transaction.id} type={transaction.type} amount={transaction.amount} user={props.user} note={transaction.note} screenName={name} />)
     })
     return (
       <div className={styles.transactionContainer}>
@@ -85,12 +109,12 @@ export default function UserTab(props) {
       </div>
     )
       content
-  }, [props.tab, props.user])
+  }, [name, props.tab, props.user])
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h3>{props.user}</h3>
+        <h3>{name}</h3>
         <div className={styles.rightElements}>
           {calculateBalance()}
           <button 
@@ -99,14 +123,14 @@ export default function UserTab(props) {
             onClick={() => setOpen(!isOpen)}
           >
             <img 
-                className={
-                  clsx({
-                    [styles.expanded]: isOpen
-                  })
-                }
-                src="chevron.svg" 
-                alt="Show more info"
-              />
+              className={
+                clsx({
+                  [styles.expanded]: isOpen
+                })
+              }
+              src="chevron.svg" 
+              alt="Show more info"
+            />
           </button>
         </div>
       </div>
