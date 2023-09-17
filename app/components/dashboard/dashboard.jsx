@@ -4,31 +4,7 @@ import styles from './dashboard.module.css'
 import { useState, useCallback } from 'react';
 import clsx from 'clsx';
 import RecentActivity from '../recent-activity/recent-activity';
-import UserTab from '../user-tab/user-tab';
-
-const testTab = [
-  {
-    type: 'requestFrom',
-    amount: 50,
-    created: "8/10/23",
-    note: "McDonalds",
-    id: "wfevfvseb"
-  },
-  {
-    type: 'requestTo',
-    amount: 25,
-    created: "8/10/23",
-    note: "Gas",
-    id: "wfevfasdfb"
-  },
-  {
-    type: 'paymentTo',
-    amount: 5,
-    created: "8/10/23",
-    note: "Taxes",
-    id: "wfqwerseb"
-  }
-]
+import AllTabs from '../all-tabs/all-tabs';
 
 export default function Dashboard() {
   const [currentTab, setTab] = useState('activeTabs');
@@ -36,19 +12,7 @@ export default function Dashboard() {
   const getTabView = useCallback(() => {
     if (currentTab == 'activeTabs') {
       return (
-        <div className={styles.tabList}>
-          <UserTab user="UserX" tab={testTab} />
-          <UserTab user="UserY" tab={testTab} />
-          <UserTab user="UserZ" tab={testTab} />
-          <UserTab user="UserW" tab={testTab} />
-          <UserTab user="UserXY" tab={testTab} />
-          <UserTab user="UserXZ" tab={testTab} />
-          <UserTab user="UserXW" tab={testTab} />
-          <UserTab user="UserYZ" tab={testTab} />
-          <UserTab user="UserYW" tab={testTab} />
-          <UserTab user="UserYX" tab={testTab} />
-          <UserTab user="UserZZ" tab={testTab} />
-        </div>
+        <AllTabs />
       )
     } else if (currentTab == 'recentActivity') {
       return (
